@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#176b63">
+<title>บันทึกเวลาทำงานรายเดือน</title>
+<style>
+:root{--green:#176b63;--mint:#e9f5f2;--ink:#18312e;--muted:#657572;--line:#dce7e4;--bg:#f5f8f7;--white:#fff;--orange:#a85b16;--red:#a23b45}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif;line-height:1.45}
+header{background:var(--green);color:white;padding:22px 16px 18px}header h1{font-size:22px;margin:0 0 5px}header p{margin:0;font-size:13px;opacity:.9}
+main{max-width:1000px;margin:auto;padding:14px;display:grid;gap:14px}.card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:0 2px 8px #16352e08}
+h2{font-size:16px;margin:0 0 12px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1;min-width:110px}
+button,select,input,textarea{font:inherit}button{border:0;border-radius:10px;background:var(--green);color:white;padding:10px 12px;cursor:pointer;font-weight:600}button.secondary{background:var(--mint);color:var(--green)}button.danger{background:#fbecee;color:var(--red)}button.small{padding:6px 9px;font-size:12px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px;background:#fff;color:var(--ink);min-height:40px}label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}.field{min-width:0;flex:1}.monthnav{display:flex;gap:8px;align-items:center}.monthnav button{flex:0 0 auto}.monthnav input{max-width:190px;text-align:center;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.stat{background:var(--mint);border-radius:12px;padding:11px}.stat span{display:block;font-size:11px;color:var(--muted)}.stat strong{font-size:19px;display:block;margin-top:4px}
+.tablewrap{overflow:auto}table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;min-width:760px}th,td{padding:8px 7px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}th{background:#f7faf9;color:var(--muted);font-weight:600;position:sticky;top:0}td input,td select{min-width:86px;padding:7px;font-size:12px;min-height:34px}td .time{min-width:94px}td .note{min-width:115px}.day{font-weight:700;white-space:nowrap}.sub{font-size:11px;color:var(--muted)}.tag{display:inline-block;background:#eef1f0;border-radius:6px;padding:3px 6px;font-size:11px}.tag.leave{background:#fff0dd;color:var(--orange)}.tag.work{background:#dff2ed;color:var(--green)}
+details summary{cursor:pointer;font-weight:700;margin-bottom:12px}.hint{font-size:12px;color:var(--muted);margin:8px 0 0}.presetgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.preset{border:1px solid var(--line);border-radius:10px;padding:8px;font-size:12px}.preset strong{display:block}.footer{font-size:12px;color:var(--muted);text-align:center;padding:6px 0 20px}.empty{padding:20px;text-align:center;color:var(--muted)}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.presetgrid{grid-template-columns:repeat(2,minmax(0,1fr))}header h1{font-size:20px}main{padding:10px}.card{padding:12px}}
+</style>
+<meta name="theme-color" content="#176b63">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="WorkLog">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+
+</head>
+<body>
+<header><h1>บันทึกเวลาทำงานรายเดือน</h1><p>บันทึกเวร · คำนวณชั่วโมงและ OT · สรุปย้อนหลังในเครื่องนี้</p></header>
+<main>
+<section class="card">
+ <div class="monthnav"><button class="secondary" id="prev">‹ เดือนก่อน</button><input type="month" id="month"><button class="secondary" id="next">เดือนถัดไป ›</button></div>
+ <p class="hint">ข้อมูลจะบันทึกอัตโนมัติในเบราว์เซอร์ของอุปกรณ์นี้ แนะนำส่งออกสำรองข้อมูลเป็นระยะ</p>
+</section>
+<section class="card"><h2>สรุปประจำเดือน</h2><div class="stats">
+<div class="stat"><span>วันทำงาน/เวร</span><strong id="days">0 วัน</strong></div>
+<div class="stat"><span>ชั่วโมงทำงานจริง</span><strong id="hours">0 ชม.</strong></div>
+<div class="stat"><span>OT ที่บันทึก</span><strong id="ots">0 ชม.</strong></div>
+<div class="stat"><span>รายได้ OT โดยประมาณ</span><strong id="money">฿0</strong></div>
+</div><p class="hint" id="summaryline"></p></section>
+<section class="card"><h2>ตั้งค่า OT</h2><div class="row">
+<div class="field"><label>อัตรา OT (บาท/ชั่วโมง)</label><input id="rate" type="number" min="0" step="1" value="170"></div>
+<div class="field"><label>ชั่วโมงทำงานมาตรฐานต่อเวร (ใช้ช่วยคำนวณ OT)</label><input id="standard" type="number" min="0" step=".5" value="8"></div>
+<div class="field"><label>การคำนวณ OT</label><select id="otmode"><option value="auto">คำนวณอัตโนมัติจากชั่วโมงเกินมาตรฐาน</option><option value="manual">กรอก OT เองรายวัน</option></select></div>
+</div><p class="hint">ปรับค่าตามระเบียบของหน่วยงานได้ รายได้เป็นค่าประมาณ ไม่รวมตัวคูณวันหยุดหรืออัตรา OT หลายประเภท</p></section>
+<section class="card"><h2>บันทึกเวลารายวัน</h2><div class="row" style="margin-bottom:12px"><button id="fillblank" class="secondary">เติมเวรเริ่มต้นให้วันที่ว่าง</button><button id="export">ส่งออก CSV</button><button id="backup" class="secondary">สำรองข้อมูล JSON</button><label class="field" style="margin:0">นำเข้าข้อมูล JSON<input type="file" id="importfile" accept=".json,application/json"></label></div>
+<div class="tablewrap"><table><thead><tr><th>วันที่</th><th>รหัสเวร/สถานะ</th><th>เข้างาน</th><th>ออกงาน</th><th>พัก (นาที)</th><th>ชั่วโมงจริง</th><th>OT (ชม.)</th><th>หมายเหตุ</th></tr></thead><tbody id="tbody"></tbody></table></div>
+<p class="hint">กะที่เลิกหลังเที่ยงคืนจะคำนวณเป็นวันถัดไปโดยอัตโนมัติเมื่อเวลาออกน้อยกว่าเวลาเข้า</p></section>
+<section class="card"><details open><summary>จัดการรหัสเวร</summary><div class="presetgrid" id="presets"></div>
+<h2 style="margin-top:16px">เพิ่ม/แก้ไขรหัสเวร</h2><div class="row">
+<div class="field"><label>รหัสเวร</label><input id="pcode" placeholder="เช่น ช12"></div><div class="field"><label>เวลาเข้า</label><input id="pstart" type="time" value="07:00"></div><div class="field"><label>เวลาออก</label><input id="pend" type="time" value="16:00"></div><div class="field"><label>พัก (นาที)</label><input id="pbreak" type="number" value="60" min="0"></div><button id="savepreset">บันทึกรหัสเวร</button></div>
+<p class="hint">รหัสเวรตั้งต้นอิงจากข้อมูลกะที่คุณเคยให้ไว้ สามารถแก้ไขเวลาให้ตรงกับตารางจริงได้</p></details></section>
+<section class="card"><h2>ประวัติสรุปรายเดือน</h2><div id="history"></div></section>
+<div class="footer">ข้อมูลเก็บในเบราว์เซอร์ที่ใช้งาน · ไม่ส่งขึ้นเซิร์ฟเวอร์ · อย่าล้างข้อมูลเว็บไซต์หากยังไม่ได้สำรอง</div>
+</main>
+<script>
+const defaultPresets={
+'ช8':{start:'07:00',end:'15:00',br:0},'ช9':{start:'07:00',end:'16:00',br:60},'ช10':{start:'07:00',end:'17:00',br:60},'ช13':{start:'07:00',end:'20:00',br:60},
+'ช16':{start:'08:00',end:'16:00',br:0},'ช44':{start:'08:00',end:'17:00',br:60},'ช47':{start:'08:00',end:'17:00',br:60},
+'ช20':{start:'08:00',end:'20:00',br:60},'ช41':{start:'08:00',end:'20:00',br:60},'ช26':{start:'09:00',end:'17:00',br:60},
+'ช33':{start:'09:00',end:'20:00',br:60},'ชบ16':{start:'09:00',end:'23:00',br:60},'ชบ6':{start:'09:00',end:'23:00',br:60},
+'ด4':{start:'23:00',end:'07:00',br:0},'ด7':{start:'23:00',end:'07:00',br:0},
+'ชด2':{start:'07:00',end:'15:00',br:0},'ช8ด4':{start:'07:00',end:'15:00',br:0}
+};
+const leaveOptions=['หยุด','ลาพักร้อน','ลากิจ','ลาป่วย','วันหยุดราชการ','อบรม/ประชุม'];
+let presets=load('wt_presets',defaultPresets), data=load('wt_data',{}), settings=load('wt_settings',{rate:170,standard:8,otmode:'auto'});
+const $=id=>document.getElementById(id);
+function load(k,d){try{return JSON.parse(localStorage.getItem(k))??structuredClone(d)}catch(e){return structuredClone(d)}}
+function persist(){localStorage.setItem('wt_data',JSON.stringify(data));localStorage.setItem('wt_presets',JSON.stringify(presets));localStorage.setItem('wt_settings',JSON.stringify(settings))}
+function keyMonth(){return $('month').value}
+function current(){let m=keyMonth();if(!data[m])data[m]={};return data[m]}
+function dateStr(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
+function timeM(t){if(!t)return null;let [h,m]=t.split(':').map(Number);return h*60+m}
+function calc(rec){if(!rec||!rec.start||!rec.end)return {hours:0,ot:0};let a=timeM(rec.start),b=timeM(rec.end);if(a===null||b===null)return {hours:0,ot:0};if(b<=a)b+=1440;let h=Math.max(0,(b-a-(+rec.br||0))/60);let ot=settings.otmode==='manual'?(+rec.ot||0):Math.max(0,h-(+settings.standard||8));return {hours:h,ot}}
+function fmt(n){return Number(n||0).toLocaleString('th-TH',{maximumFractionDigits:2})}
+function render(){
+ let m=keyMonth();if(!m)return;let [y,mo]=m.split('-').map(Number),days=new Date(y,mo,0).getDate(),tbody=$('tbody'),records=current();tbody.innerHTML='';
+ for(let d=1;d<=days;d++){let ds=dateStr(y,mo-1,d),r=records[ds]||{code:'',start:'',end:'',br:0,ot:0,note:''};let dt=new Date(y,mo-1,d);let weekday=['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'][dt.getDay()];
+ let opts='<option value="">— เลือกเวร —</option>'+Object.keys(presets).sort().map(c=>`<option ${r.code===c?'selected':''} value="${esc(c)}">${esc(c)}</option>`).join('')+'<optgroup label="วันหยุด/ลา">'+leaveOptions.map(c=>`<option ${r.code===c?'selected':''} value="${c}">${c}</option>`).join('')+'</optgroup><option value="กำหนดเอง" '+(r.code==='กำหนดเอง'?'selected':'')+'>กำหนดเวลาเอง</option>';
+ let c=calc(r);let tr=document.createElement('tr');tr.innerHTML=`<td class="day">${d} <span class="sub">${weekday}</span><div class="sub">${String(d).padStart(2,'0')}/${String(mo).padStart(2,'0')}</div></td><td><select data-d="${ds}" data-f="code">${opts}</select></td><td><input class="time" type="time" data-d="${ds}" data-f="start" value="${r.start||''}"></td><td><input class="time" type="time" data-d="${ds}" data-f="end" value="${r.end||''}"></td><td><input type="number" min="0" step="5" data-d="${ds}" data-f="br" value="${r.br??0}"></td><td><span class="tag work">${fmt(c.hours)}</span></td><td>${settings.otmode==='manual'?`<input type="number" min="0" step=".25" data-d="${ds}" data-f="ot" value="${r.ot||0}">`:`<span class="tag">${fmt(c.ot)}</span>`}</td><td><input class="note" data-d="${ds}" data-f="note" value="${esc(r.note||'')}" placeholder="หมายเหตุ"></td>`;
+ tbody.appendChild(tr);
+ }
+ tbody.querySelectorAll('[data-f]').forEach(el=>{el.addEventListener('change',()=>updateField(el));el.addEventListener('input',()=>{if(el.dataset.f==='note')updateField(el)})});
+ summary();renderPresets();renderHistory();
+}
+function updateField(el){let ds=el.dataset.d,f=el.dataset.f,records=current();if(!records[ds])records[ds]={code:'',start:'',end:'',br:0,ot:0,note:''};let r=records[ds],v=el.value;
+ if(f==='code'){r.code=v;if(presets[v]){r.start=presets[v].start;r.end=presets[v].end;r.br=presets[v].br;r.ot=0}else if(leaveOptions.includes(v)){r.start='';r.end='';r.br=0;r.ot=0}else if(v===''){r.start='';r.end='';r.br=0;r.ot=0}}
+ else r[f]=['br','ot'].includes(f)?(+v||0):v;
+ persist();render();
+}
+function summary(){let records=current(),work=0,hours=0,ots=0,leaves=0;Object.values(records).forEach(r=>{if(leaveOptions.includes(r.code)){if(r.code!=='หยุด')leaves++;return}if(r.start&&r.end){work++;let c=calc(r);hours+=c.hours;ots+=c.ot}});$('days').textContent=work+' วัน';$('hours').textContent=fmt(hours)+' ชม.';$('ots').textContent=fmt(ots)+' ชม.';$('money').textContent='฿'+fmt(ots*(+settings.rate||0));$('summaryline').textContent=`วันลา/กิจกรรมที่บันทึก: ${leaves} วัน · อัตรา OT ${fmt(settings.rate)} บาท/ชม.`}
+function renderPresets(){$('presets').innerHTML=Object.keys(presets).sort().map(c=>`<div class="preset"><strong>${esc(c)} <button class="small danger" data-del="${esc(c)}" style="float:right">ลบ</button></strong>${presets[c].start}–${presets[c].end}<br><span class="sub">พัก ${presets[c].br} นาที</span></div>`).join('');$('presets').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(confirm('ลบรหัสเวร '+b.dataset.del+' ?')){delete presets[b.dataset.del];persist();render()}})}
+function renderHistory(){let keys=Object.keys(data).sort().reverse();$('history').innerHTML=keys.length?'<div class="tablewrap"><table style="min-width:0"><thead><tr><th>เดือน</th><th>วันทำงาน</th><th>ชั่วโมง</th><th>OT</th><th>รายได้ OT</th><th></th></tr></thead><tbody>'+keys.map(m=>{let rec=data[m]||{},w=0,h=0,o=0;Object.values(rec).forEach(r=>{if(r.start&&r.end&&!leaveOptions.includes(r.code)){w++;let c=calc(r);h+=c.hours;o+=c.ot}});return `<tr><td>${m}</td><td>${w}</td><td>${fmt(h)}</td><td>${fmt(o)}</td><td>฿${fmt(o*(+settings.rate||0))}</td><td><button class="small secondary" data-open="${m}">เปิด</button></td></tr>`}).join('')+'</tbody></table></div>':'<div class="empty">ยังไม่มีข้อมูลย้อนหลัง เมื่อเริ่มบันทึก ระบบจะแสดงสรุปของแต่ละเดือนที่นี่</div>';$('history').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{$('month').value=b.dataset.open;render();window.scrollTo({top:0,behavior:'smooth'})})}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function saveSettings(){settings.rate=+$('rate').value||0;settings.standard=+$('standard').value||0;settings.otmode=$('otmode').value;persist();render()}
+$('month').value=new Date().toISOString().slice(0,7);$('rate').value=settings.rate;$('standard').value=settings.standard;$('otmode').value=settings.otmode;
+$('month').onchange=render;$('prev').onclick=()=>move(-1);$('next').onclick=()=>move(1);
+function move(n){let [y,m]=$('month').value.split('-').map(Number);let d=new Date(y,m-1+n,1);$('month').value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;render()}
+['rate','standard','otmode'].forEach(id=>$(id).addEventListener('change',saveSettings));
+$('savepreset').onclick=()=>{let c=$('pcode').value.trim();if(!c){alert('กรอกรหัสเวร');return}presets[c]={start:$('pstart').value,end:$('pend').value,br:+$('pbreak').value||0};persist();$('pcode').value='';render()};
+$('fillblank').onclick=()=>{let code=prompt('ใส่รหัสเวรที่จะเติมให้วันที่ว่าง เช่น ช8');if(!code||!presets[code]){if(code)alert('ไม่พบรหัสเวรนี้');return}let rec=current(),[y,m]=$('month').value.split('-').map(Number),n=new Date(y,m,0).getDate();for(let d=1;d<=n;d++){let ds=dateStr(y,m-1,d);if(!rec[ds]||!rec[ds].code)rec[ds]={code,start:presets[code].start,end:presets[code].end,br:presets[code].br,ot:0,note:''}}persist();render()};
+$('export').onclick=()=>{let m=keyMonth(),records=current(),rows=[['วันที่','รหัสเวร/สถานะ','เข้า','ออก','พักนาที','ชั่วโมงจริง','OT ชั่วโมง','หมายเหตุ']];Object.keys(records).sort().forEach(ds=>{let r=records[ds],c=calc(r);rows.push([ds,r.code,r.start,r.end,r.br,c.hours,c.ot,r.note])});download('\ufeff'+rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n'),`worklog-${m}.csv`,'text/csv;charset=utf-8;')};
+$('backup').onclick=()=>download(JSON.stringify({data,presets,settings},null,2),'worklog-backup.json','application/json');
+$('importfile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let obj=JSON.parse(await f.text());if(obj.data)data=obj.data;if(obj.presets)presets=obj.presets;if(obj.settings)settings=obj.settings;persist();$('rate').value=settings.rate;$('standard').value=settings.standard;$('otmode').value=settings.otmode;render();alert('นำเข้าข้อมูลเรียบร้อย')}catch(err){alert('ไฟล์ไม่ถูกต้อง')}e.target.value=''};
+function download(content,name,type){let a=document.createElement('a'),url=URL.createObjectURL(new Blob([content],{type}));a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+render();
+</script>
+<script>
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(err => {
+      console.warn("Service worker registration failed:", err);
+    });
+  });
+}
+</script>
+
+</body></html>
