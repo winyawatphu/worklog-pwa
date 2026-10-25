@@ -15,7 +15,7 @@ input,select,textarea{width:100%;border:1px solid var(--line);border-radius:9px;
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.stat{background:var(--mint);border-radius:12px;padding:11px}.stat span{display:block;font-size:11px;color:var(--muted)}.stat strong{font-size:19px;display:block;margin-top:4px}
 .tablewrap{overflow:auto}table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;min-width:760px}th,td{padding:8px 7px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}th{background:#f7faf9;color:var(--muted);font-weight:600;position:sticky;top:0}td input,td select{min-width:86px;padding:7px;font-size:12px;min-height:34px}td .time{min-width:94px}td .note{min-width:115px}.day{font-weight:700;white-space:nowrap}.sub{font-size:11px;color:var(--muted)}.tag{display:inline-block;background:#eef1f0;border-radius:6px;padding:3px 6px;font-size:11px}.tag.leave{background:#fff0dd;color:var(--orange)}.tag.work{background:#dff2ed;color:var(--green)}
 details summary{cursor:pointer;font-weight:700;margin-bottom:12px}.hint{font-size:12px;color:var(--muted);margin:8px 0 0}.presetgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.preset{border:1px solid var(--line);border-radius:10px;padding:8px;font-size:12px}.preset strong{display:block}.footer{font-size:12px;color:var(--muted);text-align:center;padding:6px 0 20px}.empty{padding:20px;text-align:center;color:var(--muted)}
-.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.cal-head{text-align:center;font-size:11px;color:var(--muted);padding:5px 0;font-weight:700}.cal-day{border:1px solid var(--line);border-radius:9px;background:#fff;min-height:88px;padding:6px;min-width:0;cursor:pointer;color:var(--ink);text-align:left;font-weight:400}.cal-day.emptyday{background:transparent;border-color:transparent;cursor:default}.cal-day .num{font-weight:800;font-size:12px;display:block}.cal-day .cal-code{display:block;font-size:11px;line-height:1.25;margin-top:4px;overflow-wrap:anywhere}.cal-day .cal-time{display:block;font-size:10px;color:var(--muted);margin-top:3px;line-height:1.2}.cal-day .cal-site{display:block;font-size:10px;color:var(--green);font-weight:700;margin-top:3px;overflow-wrap:anywhere}.cal-day.is-work{background:#e9f5f2;border-color:#c8e5de}.cal-day.is-leave{background:#fff4e5;border-color:#f1d7b0}.cal-day.is-selected{outline:2px solid var(--green)}.calendar-legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:9px}.legend-dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.cal-head{text-align:center;font-size:11px;color:var(--muted);padding:5px 0;font-weight:700}.cal-day{border:1px solid var(--line);border-radius:9px;background:#fff;min-height:88px;padding:6px;min-width:0;cursor:pointer;color:var(--ink);text-align:left;font-weight:400}.cal-day.emptyday{background:transparent;border-color:transparent;cursor:default}.cal-day .num{font-weight:800;font-size:12px;display:block}.cal-day .cal-code{display:block;font-size:11px;line-height:1.25;margin-top:4px;overflow-wrap:anywhere}.cal-day .cal-time{display:block;font-size:10px;color:var(--muted);margin-top:3px;line-height:1.2}.cal-day .cal-site{display:block;font-size:10px;color:var(--green);font-weight:700;margin-top:3px;overflow-wrap:anywhere}.cal-day.is-work{background:#e9f5f2;border-color:#c8e5de}.cal-day.is-leave{background:#fff4e5;border-color:#f1d7b0}.cal-day.site-spm{background:#dceeff;border-color:#8fc4f4}.cal-day.site-somdej{background:#ffe2c2;border-color:#f4b36c}.cal-day.is-red{background:#ffd9dc;border-color:#e78b94;color:#7b1d27}.cal-day.is-red .cal-time,.cal-day.is-red .cal-site{color:#7b1d27}.cal-day.is-public-holiday .num{font-weight:800;color:#635d5d}.cal-day.is-selected{outline:2px solid var(--green)}.calendar-legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:9px}.legend-dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px}
 @media(max-width:600px){.calendar-grid{gap:3px}.cal-day{min-height:66px;padding:4px 3px;border-radius:6px}.cal-day .cal-code{font-size:10px}.cal-day .cal-time,.cal-day .cal-site{font-size:9px}.cal-head{font-size:10px}}
 @media(max-width:600px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.presetgrid{grid-template-columns:repeat(2,minmax(0,1fr))}header h1{font-size:20px}main{padding:10px}.card{padding:12px}}
 </style>
@@ -31,7 +31,7 @@ details summary{cursor:pointer;font-weight:700;margin-bottom:12px}.hint{font-siz
 <body>
 <header><h1>บันทึกเวลาทำงานรายเดือน</h1><p>บันทึกเวร · คำนวณชั่วโมงและ OT · สรุปย้อนหลังในเครื่องนี้</p></header>
 <main>
-<section class="card"><h2>ปฏิทินเวลาทำงานประจำเดือน</h2><div class="calendar-grid" id="calendar"></div><div class="calendar-legend"><span><i class="legend-dot" style="background:#dff2ed"></i>วันทำงาน</span><span><i class="legend-dot" style="background:#fff0dd"></i>วันลา/วันหยุด</span><span>แตะวันที่เพื่อไปยังรายการบันทึกของวันนั้น</span></div></section>
+<section class="card"><h2>ปฏิทินเวลาทำงานประจำเดือน</h2><div class="calendar-grid" id="calendar"></div><div class="calendar-legend"><span><i class="legend-dot" style="background:#dceeff"></i>SPM</span><span><i class="legend-dot" style="background:#ffe2c2"></i>Somdej17</span><span><i class="legend-dot" style="background:#ffd9dc"></i>หยุด/ลา/วันหยุดราชการ</span><span>แตะวันที่เพื่อไปยังรายการบันทึกของวันนั้น</span></div></section>
 <section class="card">
  <div class="monthnav"><button class="secondary" id="prev">‹ เดือนก่อน</button><input type="month" id="month"><button class="secondary" id="next">เดือนถัดไป ›</button></div>
  <p class="hint">ข้อมูลจะบันทึกอัตโนมัติในเบราว์เซอร์ของอุปกรณ์นี้ แนะนำส่งออกสำรองข้อมูลเป็นระยะ</p>
@@ -69,6 +69,20 @@ const defaultPresets={
 const leaveOptions=['หยุด','ลาพักร้อน','ลากิจ','ลาป่วย','วันหยุดราชการ','อบรม/ประชุม'];
 let presets=load('wt_presets',defaultPresets), data=load('wt_data',{}), settings=load('wt_settings',{rateSomdej:100,rateSPM:200,standard:8,otmode:'auto'});
 const workSites=['Somdej17','SPM'];
+// วันหยุดราชการทั่วประเทศ พ.ศ. 2569 (ค.ศ. 2026) จากปฏิทินหน่วยงานรัฐ
+// ไม่รวมวันหยุดเฉพาะพื้นที่ เช่น วันหยุดพิเศษเฉพาะกรุงเทพมหานคร
+const thaiPublicHolidays={
+ '2026-01-01':'วันขึ้นปีใหม่','2026-01-02':'วันหยุดราชการกรณีพิเศษ',
+ '2026-03-03':'วันมาฆบูชา','2026-04-06':'วันจักรี',
+ '2026-04-13':'วันสงกรานต์','2026-04-14':'วันสงกรานต์','2026-04-15':'วันสงกรานต์',
+ '2026-05-31':'วันวิสาขบูชา','2026-06-01':'วันหยุดชดเชยวันวิสาขบูชา','2026-06-02':'วันหยุดราชการกรณีพิเศษ',
+ '2026-06-03':'วันเฉลิมพระชนมพรรษาสมเด็จพระราชินี',
+ '2026-07-28':'วันเฉลิมพระชนมพรรษาพระบาทสมเด็จพระเจ้าอยู่หัว','2026-07-29':'วันอาสาฬหบูชา','2026-07-31':'วันหยุดราชการกรณีพิเศษ',
+ '2026-08-12':'วันแม่แห่งชาติ', '2026-10-13':'วันนวมินทรมหาราช','2026-10-23':'วันปิยมหาราช',
+ '2026-12-05':'วันชาติและวันพ่อแห่งชาติ','2026-12-07':'วันหยุดชดเชยวันชาติและวันพ่อแห่งชาติ',
+ '2026-12-10':'วันรัฐธรรมนูญ','2026-12-31':'วันสิ้นปี'
+};
+
 function rateFor(r){return r.workplace==='Somdej17'?(+settings.rateSomdej||0):r.workplace==='SPM'?(+settings.rateSPM||0):0;}
 function incomeFor(r){return calc(r).ot*rateFor(r);}
 const $=id=>document.getElementById(id);
@@ -94,7 +108,20 @@ function renderCalendar(){
  const m=keyMonth();if(!m)return;const [y,mo]=m.split('-').map(Number),first=new Date(y,mo-1,1).getDay(),days=new Date(y,mo,0).getDate(),records=current(),grid=$('calendar');
  const heads=['อา','จ','อ','พ','พฤ','ศ','ส'];grid.innerHTML=heads.map(x=>`<div class="cal-head">${x}</div>`).join('');
  for(let i=0;i<first;i++)grid.insertAdjacentHTML('beforeend','<div class="cal-day emptyday" aria-hidden="true"></div>');
- for(let d=1;d<=days;d++){const ds=dateStr(y,mo-1,d),r=records[ds]||{},isLeave=leaveOptions.includes(r.code),hasTime=!!(r.start&&r.end),c=calc(r);let cls='cal-day'+(hasTime?' is-work':'')+(isLeave?' is-leave':'');let label=r.code||'—';let time=hasTime?`${r.start}–${r.end}`:'';let site=r.workplace||'';let detail=hasTime?`${fmt(c.hours)} ชม. · OT ${fmt(c.ot)}`:(isLeave?r.code:'');grid.insertAdjacentHTML('beforeend',`<button type="button" class="${cls}" data-caldate="${ds}" title="${ds} ${esc(label)} ${esc(time)}"><span class="num">${d}</span>${label!=='—'?`<span class="cal-code">${esc(label)}</span>`:''}${time?`<span class="cal-time">${time}</span>`:''}${site?`<span class="cal-site">${esc(site)}</span>`:''}${detail?`<span class="cal-time">${esc(detail)}</span>`:''}</button>`)}
+ for(let d=1;d<=days;d++){
+  const ds=dateStr(y,mo-1,d),r=records[ds]||{},isLeave=leaveOptions.includes(r.code),hasTime=!!(r.start&&r.end),c=calc(r),holiday=thaiPublicHolidays[ds]||'';
+  const redStatus=['หยุด','ลาพักร้อน','ลากิจ','ลาป่วย','วันหยุดราชการ'].includes(r.code);
+  let cls='cal-day';
+  if(redStatus||holiday) cls+=' is-red';
+  if(holiday) cls+=' is-public-holiday';
+  else if(r.workplace==='SPM') cls+=' site-spm';
+  else if(r.workplace==='Somdej17') cls+=' site-somdej';
+  else if(hasTime) cls+=' is-work';
+  else if(isLeave) cls+=' is-leave';
+  let label=r.code||'—',time=hasTime?`${r.start}–${r.end}`:'',site=r.workplace||'',detail=hasTime?`${fmt(c.hours)} ชม. · OT ${fmt(c.ot)}`:(isLeave?r.code:'');
+  const holidayText=holiday?`<span class="cal-time">${esc(holiday)}</span>`:'';
+  grid.insertAdjacentHTML('beforeend',`<button type="button" class="${cls}" data-caldate="${ds}" title="${ds} ${esc(label)} ${esc(time)} ${esc(holiday)}"><span class="num">${d}</span>${label!=='—'?`<span class="cal-code">${esc(label)}</span>`:''}${time?`<span class="cal-time">${time}</span>`:''}${site?`<span class="cal-site">${esc(site)}</span>`:''}${detail?`<span class="cal-time">${esc(detail)}</span>`:''}${holidayText}</button>`)
+ }
  grid.querySelectorAll('[data-caldate]').forEach(b=>b.addEventListener('click',()=>{const row=document.getElementById('day-'+b.dataset.caldate);if(row){row.scrollIntoView({behavior:'smooth',block:'center'});row.style.outline='2px solid var(--green)';setTimeout(()=>row.style.outline='',1800)}}));
 }
 function updateField(el){let ds=el.dataset.d,f=el.dataset.f,records=current();if(!records[ds])records[ds]={code:'',workplace:'',start:'',end:'',br:0,ot:0,note:''};let r=records[ds],v=el.value;
