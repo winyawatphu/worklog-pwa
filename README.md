@@ -1,33 +1,15 @@
-# WorkLog Monthly PWA
+# WorkLog Monthly — Two Shifts & Workplaces
 
-เว็บแอปบันทึกเวลาทำงานรายเดือนที่ติดตั้งลงหน้าจอโฮม iPhone ได้
+This version supports two separate shift sets per day. Each shift can have its own shift code, workplace, start/end time, break, OT and note. Monthly totals, history, calendar, and CSV export include both shifts.
 
-## ไฟล์ในชุดนี้
-- `index.html` — ตัวแอป
-- `manifest.webmanifest` — ชื่อแอปและการตั้งค่าติดตั้ง
-- `service-worker.js` — แคชไฟล์เพื่อให้เปิดแอปได้เมื่อออฟไลน์หลังเปิดครั้งแรก
-- `icons/` — ไอคอนสำหรับเว็บและ iPhone
+## Add/edit workplace OT rates
+Open the app and use **ตั้งค่า OT → สถานที่ทำงานและอัตรา OT**. Existing defaults are Somdej17 = 100 THB/hour and SPM = 200 THB/hour. Add another workplace by entering its name and OT rate. A workplace already used in a saved shift cannot be deleted until no saved shifts use it.
 
-## วิธีนำขึ้นออนไลน์
-PWA ต้องเปิดผ่าน HTTPS (ยกเว้น localhost) จึงจะติดตั้งได้และลงทะเบียน Service Worker ได้
+## Deploy to GitHub Pages
+1. Export a JSON backup from your current WorkLog first.
+2. Unzip this archive.
+3. Upload all files inside this folder to the root of your existing `worklog-pwa` repository, replacing files with the same names. Keep `index.html`, `service-worker.js`, and `manifest.webmanifest` at repository root and include the `icons` folder.
+4. Commit changes and wait for GitHub Pages deployment to succeed.
+5. Open the website and force-refresh (Command + Shift + R on Mac).
 
-### ตัวเลือกง่าย: GitHub Pages
-1. สร้างบัญชี/เข้าสู่ระบบ GitHub
-2. สร้าง repository ใหม่ เช่น `worklog-pwa`
-3. อัปโหลดไฟล์ทั้งหมดในโฟลเดอร์นี้ โดยให้ `index.html` อยู่ที่ระดับบนสุด และคงโฟลเดอร์ `icons/` ไว้
-4. เข้า Settings → Pages
-5. ใน Build and deployment เลือก Deploy from a branch, เลือก `main` และ `/ (root)` แล้ว Save
-6. รอให้ GitHub Pages แสดง URL แบบ `https://...github.io/worklog-pwa/`
-
-## วิธีเพิ่มลงหน้าจอโฮม iPhone
-1. เปิด URL ของเว็บแอปด้วย Safari บน iPhone
-2. แตะปุ่ม Share (สี่เหลี่ยมมีลูกศรขึ้น)
-3. เลือก Add to Home Screen / เพิ่มไปยังหน้าจอโฮม
-4. ตั้งชื่อ WorkLog แล้วแตะ Add
-
-## หมายเหตุเรื่องข้อมูล
-- ข้อมูลการลงเวลาเก็บใน localStorage ของเบราว์เซอร์บนอุปกรณ์นั้น ไม่ได้ซิงก์ระหว่าง Mac กับ iPhone
-- อย่าล้างข้อมูลเว็บไซต์หรือข้อมูล Safari ก่อนส่งออก CSV/สำรอง JSON
-- หลังติดตั้ง ให้เปิดแอปขณะออนไลน์อย่างน้อยหนึ่งครั้ง เพื่อให้ไฟล์ถูกแคชสำหรับใช้งานออฟไลน์
-- หากอัปเดตโค้ดในอนาคต อาจต้องเพิ่มเวอร์ชัน `CACHE_NAME` ใน `service-worker.js` เพื่อให้เครื่องรับไฟล์ใหม่
-- การคำนวณ OT เป็นค่าประมาณ ควรตั้งค่าให้ตรงกับระเบียบของหน่วยงาน
+Existing saved data is kept in browser local storage. This update preserves the existing first shift fields and adds an optional `shift2` object per date. Export JSON before updating.

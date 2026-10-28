@@ -1,4 +1,4 @@
-const CACHE_NAME = "worklog-pwa-v4-holiday-dates";
+const CACHE_NAME = "worklog-pwa-v5-two-shifts-sites";
 const APP_SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png", "./icons/maskable-512.png"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
