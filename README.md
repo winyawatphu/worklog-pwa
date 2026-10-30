@@ -1,18 +1,15 @@
-WorkLog PWA — Two shifts in one row + dynamic workplace OT summary
+# WorkLog Monthly — Two Shifts & Workplaces
 
-What's changed:
-- Each calendar date is displayed as ONE row.
-- Shift 1 and Shift 2 are side-by-side in grouped columns, similar to the provided spreadsheet.
-- Existing shift 1 and shift 2 data structure is retained; no migration or clearing of browser storage is required.
-- Workplace summary is dynamic and includes every configured workplace, including Lotus.
-- CSV export includes both shifts, workplace, OT rate, OT hours, OT income, new-shift field and notes.
-- Service worker cache name is bumped to v6.
+This version supports two separate shift sets per day. Each shift can have its own shift code, workplace, start/end time, break, OT and note. Monthly totals, history, calendar, and CSV export include both shifts.
 
-Deploy:
-1. Back up JSON from the current app.
-2. Extract this ZIP.
-3. Upload the CONTENTS of WorkLog_PWA_Two_Shifts to the ROOT of the existing GitHub Pages repository, replacing same-named files. Keep index.html at repository root.
-4. Commit and wait for GitHub Pages deployment to finish.
-5. Open the site and hard refresh (Cmd+Shift+R on Mac).
+## Add/edit workplace OT rates
+Open the app and use **ตั้งค่า OT → สถานที่ทำงานและอัตรา OT**. Existing defaults are Somdej17 = 100 THB/hour and SPM = 200 THB/hour. Add another workplace by entering its name and OT rate. A workplace already used in a saved shift cannot be deleted until no saved shifts use it.
 
-Data remains in each browser's local storage. Do not clear site data during update.
+## Deploy to GitHub Pages
+1. Export a JSON backup from your current WorkLog first.
+2. Unzip this archive.
+3. Upload all files inside this folder to the root of your existing `worklog-pwa` repository, replacing files with the same names. Keep `index.html`, `service-worker.js`, and `manifest.webmanifest` at repository root and include the `icons` folder.
+4. Commit changes and wait for GitHub Pages deployment to succeed.
+5. Open the website and force-refresh (Command + Shift + R on Mac).
+
+Existing saved data is kept in browser local storage. This update preserves the existing first shift fields and adds an optional `shift2` object per date. Export JSON before updating.
